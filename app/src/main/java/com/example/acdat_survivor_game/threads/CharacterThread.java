@@ -34,6 +34,7 @@ public class CharacterThread extends Thread{
         while (running){
 
             sprite.setPositionUpdated(x, y);
+            sprite.update();
 
             try {
                 sleep(40);

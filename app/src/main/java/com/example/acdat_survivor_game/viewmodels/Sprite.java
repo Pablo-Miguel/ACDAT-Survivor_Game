@@ -1,12 +1,15 @@
 package com.example.acdat_survivor_game.viewmodels;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 
+import com.example.acdat_survivor_game.R;
 import com.example.acdat_survivor_game.surfaceviews.SurvivorView;
 
 public class Sprite {
@@ -20,22 +23,19 @@ public class Sprite {
     private int currentFrame = 0;
     private int width;
     private int height;
-    private int[] DIRECTION_TO_ANIMATION_MAP = {3, 1, 0, 2};
-    private Paint p;
+    private int[] DIRECTION_TO_ANIMATION_MAP;
 
-    public Sprite(SurvivorView survivorView, Bitmap bmp) {
+    public Sprite(int x, int y, SurvivorView survivorView, Resources resources, int resource, int w, int h, int[] DIRECTION_TO_ANIMATION_MAP) {
         this.survivorView = survivorView;
-        this.bmp = bmp;
+        bmp = BitmapFactory.decodeResource(resources, resource);
+        bmp = bmp.createScaledBitmap(bmp, w, h, true);
         this.width = bmp.getWidth() / BMP_COLUMNS;
         this.height = bmp.getHeight() / BMP_ROWS;
-        x = (survivorView.getWidth() / 2) - width;
-        y = (survivorView.getHeight() / 2) - height;
+        this.x = x;
+        this.y = y;
         xSpeed = 5;
         ySpeed = 5;
-        p = new Paint();
-        p.setColor(Color.WHITE);
-        p.setTextSize(25);
-        p.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        this.DIRECTION_TO_ANIMATION_MAP = DIRECTION_TO_ANIMATION_MAP;
     }
 
     private int getAnimationRow() {
@@ -49,7 +49,7 @@ public class Sprite {
         this.ySpeed = y;
     }
 
-    private void update(){
+    public void update(){
         int w_margin = 150;
         int h_margin = 50;
         if(x > survivorView.getWidth() - width - xSpeed + w_margin || x + xSpeed < 0 - w_margin){
@@ -67,8 +67,6 @@ public class Sprite {
     }
 
     public void onDraw(Canvas canvas){
-        update();
-
         int srcX = currentFrame * width;
         int srcY = getAnimationRow() * height;
         if(xSpeed == 0 && ySpeed == 0){
@@ -79,7 +77,37 @@ public class Sprite {
         Rect src = new Rect(srcX, srcY, srcX + width, srcY + height);
         Rect dst = new Rect(x, y, x + width, y + height);
         canvas.drawBitmap(bmp, src, dst, null);
-        canvas.drawText("NitroSlinger", x + 135, y + 50, p);
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
 }

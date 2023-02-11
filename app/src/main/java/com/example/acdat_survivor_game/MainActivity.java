@@ -81,10 +81,7 @@ public class MainActivity extends AppCompatActivity {
             y = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_HAT_Y, historyPos);
         }
 
-        Log.i("SurvivorGame", "X:" + x + " Y:" + y);
-        survivorView.setPositionUpdated((int) (x * 50), (int) (y * 50));
-
-        // Update the ship object based on the new x and y values
+        survivorView.setPositionUpdated((int) (x * 30), (int) (y * 30));
     }
 
     @Override
@@ -107,6 +104,30 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onGenericMotionEvent(event);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((event.getSource() & InputDevice.SOURCE_GAMEPAD)
+                == InputDevice.SOURCE_GAMEPAD) {
+            if (event.getRepeatCount() == 0) {
+                switch (keyCode) {
+                    case KeyEvent.KEYCODE_BUTTON_A:
+                        survivorView.shootVertical(5);
+                        return true;
+                    case KeyEvent.KEYCODE_BUTTON_B:
+                        survivorView.shootHorizontal(5);
+                        return true;
+                    case KeyEvent.KEYCODE_BUTTON_X:
+                        survivorView.shootHorizontal(-5);
+                        return true;
+                    case KeyEvent.KEYCODE_BUTTON_Y:
+                        survivorView.shootVertical(-5);
+                        return true;
+                }
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     public ArrayList<Integer> getGameControllerIds() {
