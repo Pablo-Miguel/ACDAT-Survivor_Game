@@ -2,6 +2,7 @@ package com.example.acdat_survivor_game;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,10 +19,9 @@ import com.example.acdat_survivor_game.surfaceviews.SurvivorView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityMainBinding binding;
-    private SurvivorView survivorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,125 +33,26 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
-        //setContentView(view);
+        setContentView(view);
 
-        survivorView = new SurvivorView(MainActivity.this);
+        binding.btnStart.setOnClickListener(this);
+        binding.btnExit.setOnClickListener(this);
 
-        setContentView(survivorView);
-
-    }
-
-    private static float getCenteredAxis(MotionEvent event, InputDevice device, int axis, int historyPos) {
-        final InputDevice.MotionRange range = device.getMotionRange(axis, event.getSource());
-
-        // A joystick at rest does not always report an absolute position of
-        // (0,0). Use the getFlat() method to determine the range of values
-        // bounding the joystick axis center.
-        if (range != null) {
-            final float flat = range.getFlat();
-            final float value = historyPos < 0 ? event.getAxisValue(axis): event.getHistoricalAxisValue(axis, historyPos);
-
-            // Ignore axis values that are within the 'flat' region of the
-            // joystick axis center.
-            if (Math.abs(value) > flat) {
-                return value;
-            }
-        }
-        return 0;
-    }
-
-    private void processJoystickInput(MotionEvent event, int historyPos) {
-
-        InputDevice inputDevice = event.getDevice();
-
-        // Calculate the horizontal distance to move by
-        // using the input value from one of these physical controls:
-        // the left control stick, hat axis, or the right control stick.
-        float x = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_X, historyPos);
-
-        if (x == 0) {
-            x = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_HAT_X, historyPos);
-        }
-
-        // Calculate the vertical distance to move by
-        // using the input value from one of these physical controls:
-        // the left control stick, hat switch, or the right control stick.
-        float y = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_Y, historyPos);
-        if (y == 0) {
-            y = getCenteredAxis(event, inputDevice, MotionEvent.AXIS_HAT_Y, historyPos);
-        }
-
-        survivorView.setPositionUpdated((int) (x * 30), (int) (y * 30));
     }
 
     @Override
-    public boolean onGenericMotionEvent(MotionEvent event) {
-        // Check that the event came from a game controller
-        if ((event.getSource() & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK) {
-
-            // Process all historical movement samples in the batch
-            final int historySize = event.getHistorySize();
-
-            // Process the movements starting from the
-            // earliest historical position in the batch
-            for (int i = 0; i < historySize; i++) {
-                // Process the event at historical position i
-                processJoystickInput(event, i);
-            }
-
-            // Process the current movement sample in the batch (position -1)
-            processJoystickInput(event, -1);
-            return true;
+    public void onClick(View v) {
+        if(v.getId() == R.id.btnStart){
+            Intent intent = new Intent(MainActivity.this, SurvivorActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            this.finish();
+        } else if(v.getId() == R.id.btnExit){
+            System.exit(0);
         }
-        return super.onGenericMotionEvent(event);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((event.getSource() & InputDevice.SOURCE_GAMEPAD)
-                == InputDevice.SOURCE_GAMEPAD) {
-            if (event.getRepeatCount() == 0) {
-                switch (keyCode) {
-                    case KeyEvent.KEYCODE_BUTTON_A:
-                        survivorView.shootVertical(5);
-                        return true;
-                    case KeyEvent.KEYCODE_BUTTON_B:
-                        survivorView.shootHorizontal(5);
-                        return true;
-                    case KeyEvent.KEYCODE_BUTTON_X:
-                        survivorView.shootHorizontal(-5);
-                        return true;
-                    case KeyEvent.KEYCODE_BUTTON_Y:
-                        survivorView.shootVertical(-5);
-                        return true;
-                }
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    public ArrayList<Integer> getGameControllerIds() {
-        ArrayList<Integer> gameControllerDeviceIds = new ArrayList<Integer>();
-        int[] deviceIds = InputDevice.getDeviceIds();
-        for (int deviceId : deviceIds) {
-            InputDevice dev = InputDevice.getDevice(deviceId);
-            int sources = dev.getSources();
-
-            // Verify that the device has gamepad buttons, control sticks, or both.
-            if (((sources & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD)
-                    || ((sources & InputDevice.SOURCE_JOYSTICK)
-                    == InputDevice.SOURCE_JOYSTICK)) {
-                // This device is a game controller. Store its device ID.
-                if (!gameControllerDeviceIds.contains(deviceId)) {
-                    gameControllerDeviceIds.add(deviceId);
-                }
-            }
-        }
-        return gameControllerDeviceIds;
     }
 
     @Override
     public void onBackPressed() {
-
+        System.exit(0);
     }
 }

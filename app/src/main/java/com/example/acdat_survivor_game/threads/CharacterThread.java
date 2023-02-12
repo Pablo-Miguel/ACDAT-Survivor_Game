@@ -1,6 +1,5 @@
 package com.example.acdat_survivor_game.threads;
 
-import com.example.acdat_survivor_game.viewmodels.Rectangulo;
 import com.example.acdat_survivor_game.viewmodels.Sprite;
 
 public class CharacterThread extends Thread{
@@ -31,6 +30,10 @@ public class CharacterThread extends Thread{
 
     @Override
     public void run() {
+        run_thread();
+    }
+
+    private synchronized void run_thread(){
         while (running){
 
             sprite.setPositionUpdated(x, y);

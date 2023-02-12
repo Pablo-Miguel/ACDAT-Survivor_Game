@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ACDAT-Survivor_Game</string>
+    <string name="btnStart">Empezar</string>
+    <string name="btnExit">Salir</string>
+    <string name="btnRestart">Volver a jugar</string>
+    <string name="btnHome">Inicio</string>
+    <string name="txtScore" />
 </resources>

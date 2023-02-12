@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".LoseActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="#616161"
         android:orientation="horizontal"
         android:padding="30sp"
@@ -18,32 +18,42 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="389dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/isaac_start" />
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/isaac_end" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="20sp">
 
-            <Button
-                android:id="@+id/btnStart"
+            <TextView
+                android:id="@+id/txtScore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:height="70sp"
-                android:text="@string/btnStart" />
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <Button
-                android:id="@+id/btnExit"
+                android:id="@+id/btnRestart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:height="70sp"
-                android:text="@string/btnExit" />
+                android:text="@string/btnRestart" />
+
+            <Button
+                android:id="@+id/btnHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:height="70sp"
+                android:text="@string/btnHome" />
         </LinearLayout>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

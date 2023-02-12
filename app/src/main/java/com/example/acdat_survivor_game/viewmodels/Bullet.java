@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 
 import com.example.acdat_survivor_game.R;
 import com.example.acdat_survivor_game.surfaceviews.SurvivorView;
@@ -38,6 +39,15 @@ public class Bullet {
 
         if(y > survivorView.getHeight() - bmp.getHeight() - ySpeed || y + ySpeed < 0){
             reciclar();
+        }
+
+        for (int i = 0; i < survivorView.getEnemies().size(); i++) {
+            if(survivorView.getEnemies().get(i).isCollidingBullet(this)){
+                reciclar();
+                survivorView.getEnemies().get(i).removeHP(1);
+                survivorView.setMediaPlayer(MediaPlayer.create(survivorView.getContext(), R.raw.hit_zombie));
+                survivorView.getMediaPlayer().start();
+            }
         }
 
         x = x + xSpeed;
@@ -80,5 +90,30 @@ public class Bullet {
 
     public static void setBullets(LinkedList<Bullet> bullets) {
         Bullet.bullets = bullets;
+    }
+
+    public Integer getX() {
+        return x;
+    }
+
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
+    public Integer getY() {
+        return y;
+    }
+
+    public void setY(Integer y) {
+        this.y = y;
+    }
+
+
+    public double getWidth() {
+        return bmp.getWidth();
+    }
+
+    public double getHeight() {
+        return bmp.getHeight();
     }
 }

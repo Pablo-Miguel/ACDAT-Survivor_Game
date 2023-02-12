@@ -29,6 +29,10 @@ public class BulletThread extends Thread{
 
     @Override
     public void run() {
+        run_thread();
+    }
+
+    private synchronized void run_thread(){
         while (running){
 
             bullet.update();
