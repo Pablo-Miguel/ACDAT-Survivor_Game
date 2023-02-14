@@ -57,8 +57,9 @@ public class SurvivorView extends SurfaceView implements SurfaceHolder.Callback 
     private Image coin;
     private Text text;
     private SurvivorActivity activity;
-    private Integer level;
+    private Integer level, cont = 0;
     private Context context;
+    private Boolean canShoot = true;
 
     public SurvivorView(Context context, SurvivorActivity activity) {
         super(context);
@@ -84,8 +85,8 @@ public class SurvivorView extends SurfaceView implements SurfaceHolder.Callback 
 
         int[] character_moves = {3, 1, 0, 2};
         character = new Sprite(
-                this.getWidth()/2,
-                this.getHeight()/2,
+                getWidth()/2,
+                getHeight()/2,
                 this,
                 getResources(),
                 R.drawable.isaac_v2,
@@ -97,8 +98,8 @@ public class SurvivorView extends SurfaceView implements SurfaceHolder.Callback 
 
         character_moves = new int[]{2, 3, 0, 1};
         enemies.add(new Sprite(
-                rnd.nextInt(this.getWidth() - 1000),
-                rnd.nextInt(this.getHeight() - 1000),
+                rnd.nextInt(getWidth() - 1000),
+                rnd.nextInt(getHeight() - 1000),
                 this,
                 getResources(),
                 R.drawable.zombie1,
@@ -347,6 +348,14 @@ public class SurvivorView extends SurfaceView implements SurfaceHolder.Callback 
             destroy();
         }
 
+        cont += 1;
+        if (cont >= 5000)
+            cont = 0;
+
+        if(cont % 30 == 0){
+            canShoot = true;
+        }
+
     }
 
     public void setPositionUpdated(int x, int y) {
@@ -354,39 +363,45 @@ public class SurvivorView extends SurfaceView implements SurfaceHolder.Callback 
     }
 
     public void shootVertical(int dy) {
-        mediaPlayer = MediaPlayer.create(context, R.raw.shoot_isaac);
-        mediaPlayer.start();
-        bulletsThreads.add(new BulletThread());
-        bullets.add(Bullet.getBullet(
-                character.getWidth()/2 + character.getX() - 30,
-                character.getHeight()/2 + character.getY() - 30,
-                0,
-                dy,
-                getResources(),
-                this,
-                bulletsThreads.getLast()
-        ));
-        bulletsThreads.getLast().setBullet(bullets.getLast());
-        bulletsThreads.getLast().setRunning(true);
-        bulletsThreads.getLast().start();
+        if(canShoot){
+            mediaPlayer = MediaPlayer.create(context, R.raw.shoot_isaac);
+            mediaPlayer.start();
+            bulletsThreads.add(new BulletThread());
+            bullets.add(Bullet.getBullet(
+                    character.getWidth()/2 + character.getX() - 30,
+                    character.getHeight()/2 + character.getY() - 30,
+                    0,
+                    dy,
+                    getResources(),
+                    this,
+                    bulletsThreads.getLast()
+            ));
+            bulletsThreads.getLast().setBullet(bullets.getLast());
+            bulletsThreads.getLast().setRunning(true);
+            bulletsThreads.getLast().start();
+            canShoot = false;
+        }
     }
 
     public void shootHorizontal(int dx) {
-        mediaPlayer = MediaPlayer.create(context, R.raw.shoot_isaac);
-        mediaPlayer.start();
-        bulletsThreads.add(new BulletThread());
-        bullets.add(Bullet.getBullet(
-                character.getWidth()/2 + character.getX() - 30,
-                character.getHeight()/2 + character.getY() - 30,
-                dx,
-                0,
-                getResources(),
-                this,
-                bulletsThreads.getLast()
-        ));
-        bulletsThreads.getLast().setBullet(bullets.getLast());
-        bulletsThreads.getLast().setRunning(true);
-        bulletsThreads.getLast().start();
+        if(canShoot){
+            mediaPlayer = MediaPlayer.create(context, R.raw.shoot_isaac);
+            mediaPlayer.start();
+            bulletsThreads.add(new BulletThread());
+            bullets.add(Bullet.getBullet(
+                    character.getWidth()/2 + character.getX() - 30,
+                    character.getHeight()/2 + character.getY() - 30,
+                    dx,
+                    0,
+                    getResources(),
+                    this,
+                    bulletsThreads.getLast()
+            ));
+            bulletsThreads.getLast().setBullet(bullets.getLast());
+            bulletsThreads.getLast().setRunning(true);
+            bulletsThreads.getLast().start();
+            canShoot = false;
+        }
     }
 
     public LinkedList<Bullet> getBullets() {
