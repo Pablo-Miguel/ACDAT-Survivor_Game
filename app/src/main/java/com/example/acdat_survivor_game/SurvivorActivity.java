@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -21,6 +22,7 @@ public class SurvivorActivity extends AppCompatActivity {
 
     private ActivitySurvivorBinding binding;
     private SurvivorView survivorView;
+    private MediaPlayer mediaBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,10 @@ public class SurvivorActivity extends AppCompatActivity {
         survivorView = new SurvivorView(SurvivorActivity.this, this);
 
         setContentView(survivorView);
-
+        mediaBackground = MediaPlayer.create(SurvivorActivity.this, R.raw.bg_music);
+        mediaBackground.setLooping(true);
+        mediaBackground.setVolume(0.2f, 0.2f);
+        mediaBackground.start();
     }
 
     private static float getCenteredAxis(MotionEvent event, InputDevice device, int axis, int historyPos) {
@@ -150,6 +155,7 @@ public class SurvivorActivity extends AppCompatActivity {
     }
 
     public void loseActivity(Integer score) {
+        mediaBackground.stop();
         Intent intent = new Intent(SurvivorActivity.this, LoseActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("score", score);
         startActivity(intent);

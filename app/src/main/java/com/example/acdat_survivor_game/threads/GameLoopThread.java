@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.view.SurfaceView;
 
 public class GameLoopThread extends Thread{
-    static final long FPS = 30;
+    static final long FPS = 20;
     boolean running;
     private SurfaceView view;
 
@@ -23,7 +23,7 @@ public class GameLoopThread extends Thread{
 
     @Override
     public void run() {
-        long ticksPS = 1500 / FPS;
+        long ticksPS = 1000 / FPS;
         long startTime;
         long sleepTime;
 

@@ -5,7 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 
 import com.example.acdat_survivor_game.R;
 import com.example.acdat_survivor_game.surfaceviews.SurvivorView;
@@ -20,6 +23,7 @@ public class Bullet {
     private Bitmap bmp;
     private SurvivorView survivorView;
     private BulletThread bulletThread;
+    private MediaPlayer mediaPlayer;
 
     public Bullet(Integer x, Integer y, Integer xSpeed, Integer ySpeed, Resources resources, SurvivorView survivorView, BulletThread bulletThread) {
         this.x = x;
@@ -45,8 +49,8 @@ public class Bullet {
             if(survivorView.getEnemies().get(i).isCollidingBullet(this)){
                 reciclar();
                 survivorView.getEnemies().get(i).removeHP(1);
-                survivorView.setMediaPlayer(MediaPlayer.create(survivorView.getContext(), R.raw.hit_zombie));
-                survivorView.getMediaPlayer().start();
+                mediaPlayer = MediaPlayer.create(survivorView.getContext(), R.raw.hit_zombie);
+                mediaPlayer.start();
             }
         }
 

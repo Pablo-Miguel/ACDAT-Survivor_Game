@@ -2,6 +2,8 @@ package com.example.acdat_survivor_game.surfaceviews;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.util.Log;
@@ -35,7 +37,6 @@ import java.util.Random;
 
 public class SurvivorView extends SurfaceView implements SurfaceHolder.Callback {
     Random rnd = new Random();
-    private MediaPlayer mediaBackground;
     private MediaPlayer mediaPlayer;
     private GameLoopThread gameLoopThread;
     private CharacterThread characterThread;
@@ -179,10 +180,6 @@ public class SurvivorView extends SurfaceView implements SurfaceHolder.Callback 
         enemiesDifficultyThread = new EnemiesDifficultyThread(this);
         enemiesDifficultyThread.setRunning(true);
         enemiesDifficultyThread.start();
-
-        mediaBackground = MediaPlayer.create(context, R.raw.bg_music);
-        mediaBackground.setLooping(true);
-        mediaBackground.start();
 
     }
 
@@ -341,10 +338,9 @@ public class SurvivorView extends SurfaceView implements SurfaceHolder.Callback 
         }
 
         if(character.isDead()){
-            mediaPlayer = MediaPlayer.create(context, R.raw.dead_isaac);
+            mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.dead_isaac);
             mediaPlayer.start();
             activity.loseActivity(coins_cont);
-            mediaBackground.stop();
             destroy();
         }
 
@@ -364,7 +360,7 @@ public class SurvivorView extends SurfaceView implements SurfaceHolder.Callback 
 
     public void shootVertical(int dy) {
         if(canShoot){
-            mediaPlayer = MediaPlayer.create(context, R.raw.shoot_isaac);
+            mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.shoot_isaac);
             mediaPlayer.start();
             bulletsThreads.add(new BulletThread());
             bullets.add(Bullet.getBullet(
@@ -385,7 +381,7 @@ public class SurvivorView extends SurfaceView implements SurfaceHolder.Callback 
 
     public void shootHorizontal(int dx) {
         if(canShoot){
-            mediaPlayer = MediaPlayer.create(context, R.raw.shoot_isaac);
+            mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.shoot_isaac);
             mediaPlayer.start();
             bulletsThreads.add(new BulletThread());
             bullets.add(Bullet.getBullet(
@@ -478,11 +474,4 @@ public class SurvivorView extends SurfaceView implements SurfaceHolder.Callback 
         this.level = level;
     }
 
-    public MediaPlayer getMediaPlayer() {
-        return mediaPlayer;
-    }
-
-    public void setMediaPlayer(MediaPlayer mediaPlayer) {
-        this.mediaPlayer = mediaPlayer;
-    }
 }

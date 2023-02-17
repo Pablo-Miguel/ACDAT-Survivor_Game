@@ -1,6 +1,7 @@
 package com.example.acdat_survivor_game.threads;
 
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 
 import com.example.acdat_survivor_game.R;
 import com.example.acdat_survivor_game.surfaceviews.SurvivorView;
